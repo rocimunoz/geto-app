@@ -1,23 +1,23 @@
-import Vue from "vue";
-import Router from "vue-router";
-import Users from "./components/Users.vue";
-import BoardGames from "./components/BoardGames.vue";
+import Vue from 'vue'
+import Router from 'vue-router'
+import Users from './components/Users/Users.vue'
+import BoardGames from './components/BoardGames.vue'
 
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
-  mode: "history",
+  mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "/users",
-      name: "Users",
+      path: '/users',
+      name: 'Users',
       component: Users
     },
     {
-      path: "/boardgames",
-      name: "BoardGames",
+      path: '/boardgames',
+      name: 'BoardGames',
       component: BoardGames
     }
   ]
-});
+})
