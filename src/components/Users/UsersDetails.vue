@@ -30,7 +30,7 @@
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                   <v-btn
-                    @click="onButtonDeleteUser(false)"
+                    @click="onCloseDetails()"
                     v-on="on"
                     class="mx-2"
                     fab
@@ -124,7 +124,7 @@ export default {
           telefono: evt.target.elements.telefono.value,
           email: evt.target.elements.email.value
         })
-        this.$store.commit('editMode', false)
+        this.onCloseDetails()
         this.$toasted.show('Usuario actualizado con éxito', {
           position: 'top-center',
           duration: 3000
@@ -132,6 +132,9 @@ export default {
       } else {
         evt.preventDefault()
       }
+    },
+    onCloseDetails() {
+      this.$store.commit('editMode', false)
     }
   },
   computed: {

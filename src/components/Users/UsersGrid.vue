@@ -1,5 +1,22 @@
 <template>
   <v-card fluid :disabled="isEditMode">
+    <v-dialog v-model="dialog" width="500" @keydown.esc="cancel">
+      <v-card>
+        <v-toolbar color="amber" dark dense flat>
+          <v-toolbar-title class="white--text">Borrado</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text class="pa-4"
+          >Se va a eliminar el registro. ¿Estas de acuerdo?</v-card-text
+        >
+        <v-card-actions class="pt-0">
+          <v-spacer></v-spacer>
+          <v-btn color="primary darken-1" text @click="deleteUser"
+            >Aceptar</v-btn
+          >
+          <v-btn color="grey" text @click="closeDialog">Cancelar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-card-title>
       Listado de Usuarios
       <div class="flex-grow-1"></div>
@@ -43,7 +60,7 @@
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
               <v-btn
-                @click="deleteUser()"
+                @click="openDialog()"
                 class="mx-2"
                 fab
                 x-small
@@ -70,6 +87,7 @@ export default {
   data() {
     return {
       item: {},
+      dialog: false,
       search: '',
       headers: [
         {
@@ -131,12 +149,41 @@ export default {
       this.$store.commit('editMode', value)
     },
     deleteUser() {
-      alert('Borrar usuario')
+      let user = this.getUserSelected
+      /*   let refDelete = this.ref.where('id', '==', user.id)
+      refDelete.get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          doc.ref.delete()
+        })
+      }) */
+      /*  this.$toasted.show('Usuario eliminado con éxito', {
+        position: 'top-center',
+        duration: 3000
+      }) */
+
+      this.ref
+        .doc(user.id)
+        .delete()
+        .then(function() {
+          console.log('Document successfully deleted!')
+        })
+        .catch(function(error) {
+          console.error('Error removing document: ', error)
+        })
+    },
+    openDialog() {
+      this.dialog = true
+    },
+    closeDialog() {
+      this.dialog = false
     }
   },
   computed: {
     isEditMode() {
       return this.$store.state.edit_mode
+    },
+    getUserSelected() {
+      return this.$store.state.user_selected
     }
   }
 }
