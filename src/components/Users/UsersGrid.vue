@@ -72,7 +72,12 @@ export default {
       item: {},
       search: '',
       headers: [
-        { text: 'Id', align: 'left', sortable: false, value: 'id' },
+        {
+          text: 'Id',
+          align: 'left',
+          sortable: false,
+          value: 'id'
+        },
         { text: 'Nombre', value: 'nombre' },
         { text: 'Apellido', value: 'apellido' },
         { text: 'Es socio', value: 'es_socio' },
