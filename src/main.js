@@ -4,8 +4,10 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import firebase from 'firebase'
+import Toasted from 'vue-toasted'
 
 Vue.config.productionTip = false
+Vue.use(Toasted)
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDlQUfOtriJvhDd3k480bLwSnn3SNYkZq4',
