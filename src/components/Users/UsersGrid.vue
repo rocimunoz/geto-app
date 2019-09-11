@@ -1,5 +1,5 @@
 <template>
-  <v-card fluid>
+  <v-card fluid :disabled="isEditMode">
     <v-card-title>
       Listado de Usuarios
       <div class="flex-grow-1"></div>
@@ -28,23 +28,17 @@
         <thead>
           <tr>
             <th align:right :colspan="headers.length">
-              <v-btn
-                @click="newUser()"
-                class="mx-2"
-                fab
-                x-small
-                dark
-                color="amber"
-              >
+              <v-btn @click="newUser()" class="mx-2" fab x-small color="amber">
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
+
               <v-btn
-                @click="editUser()"
+                @click="editUser(true)"
                 class="mx-2"
                 fab
                 x-small
-                dark
                 color="amber"
+                :disabled="isDisabled()"
               >
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
@@ -53,8 +47,8 @@
                 class="mx-2"
                 fab
                 x-small
-                dark
                 color="amber"
+                :disabled="isDisabled()"
               >
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
@@ -120,17 +114,26 @@ export default {
         this.$store.commit('toggleUserDetails', '')
       }
     },
+    isDisabled() {
+      let user = this.$store.state.user_selected
+      return Object.keys(user).length === 0
+    },
+
     newUser() {
       alert('nuevo usuario')
     },
-    editUser() {
-      alert('Edicion de  usuario')
+    editUser(value) {
+      this.$store.commit('editMode', value)
     },
     deleteUser() {
       alert('Borrar usuario')
     }
   },
-  computed: {}
+  computed: {
+    isEditMode() {
+      return this.$store.state.edit_mode
+    }
+  }
 }
 </script>
 

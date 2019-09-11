@@ -5,12 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    //layout: 'main-layout',
-    user_selected: {}
+    user_selected: {},
+    edit_mode: false
   },
   mutations: {
     toggleUserDetails(state, payload) {
       state.user_selected = payload
+    },
+    editMode(state, payload) {
+      state.edit_mode = payload
     }
   },
   actions: {}
