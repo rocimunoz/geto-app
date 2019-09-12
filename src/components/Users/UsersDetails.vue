@@ -114,29 +114,27 @@ export default {
   },
   methods: {
     onSubmit(evt) {
-      //Compruebo modo
-
-      //Guardar usuario en Firebase
+      let objUser = {
+        nombre: evt.target.elements.nombre.value,
+        apellido: evt.target.elements.apellidos.value,
+        telefono: evt.target.elements.telefono.value,
+        email: evt.target.elements.email.value,
+        esSocio: true
+      }
       if (this.$refs.form.validate()) {
         this.user_selected = this.getUserSelected
         if (this.isEditMode) {
           let updateRef = this.ref.doc(this.user_selected.id)
-          updateRef.update({
-            nombre: evt.target.elements.nombre.value,
-            apellido: evt.target.elements.apellidos.value,
-            telefono: evt.target.elements.telefono.value,
-            email: evt.target.elements.email.value
+          updateRef.update(objUser).then(function() {
+            this.showToastedMessage('Usuario actualizado con exito')
           })
         } else if (this.isNewMode) {
-          //firebase para dar de alta usuario
-          alert('dare de alta el usuario')
+          this.ref.add(objUser).then(function(docRef) {
+            this.showToastedMessage('Usuario creado con exito')
+          })
         }
 
         this.onCloseDetails()
-        this.$toasted.show('Usuario actualizado con éxito', {
-          position: 'top-center',
-          duration: 3000
-        })
       } else {
         evt.preventDefault()
       }
@@ -147,6 +145,12 @@ export default {
       } else if (this.isNewMode) {
         this.$store.commit('newMode', false)
       }
+    },
+    showToastedMessage(message) {
+      this.$toasted.show(message, {
+        position: 'top-center',
+        duration: 3000
+      })
     }
   },
   computed: {
