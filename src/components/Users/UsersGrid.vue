@@ -51,6 +51,7 @@
                 fab
                 x-small
                 color="amber"
+                :disabled="!isDisabledButtons()"
               >
                 <v-icon>mdi-plus</v-icon>
               </v-btn>

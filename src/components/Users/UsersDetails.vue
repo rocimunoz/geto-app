@@ -89,6 +89,7 @@
             <v-switch
               :value="getUserSelected.esSocio"
               label="Es Socio"
+              name="socio"
             ></v-switch>
           </v-col>
         </v-row>
@@ -119,18 +120,18 @@ export default {
         apellido: evt.target.elements.apellidos.value,
         telefono: evt.target.elements.telefono.value,
         email: evt.target.elements.email.value,
-        esSocio: true
+        esSocio: evt.target.elements.socio.value
       }
       if (this.$refs.form.validate()) {
         this.user_selected = this.getUserSelected
         if (this.isEditMode) {
           let updateRef = this.ref.doc(this.user_selected.id)
           updateRef.update(objUser).then(function() {
-            this.showToastedMessage('Usuario actualizado con exito')
+            //showToastedMessage('Usuario actualizado con exito')
           })
         } else if (this.isNewMode) {
           this.ref.add(objUser).then(function(docRef) {
-            this.showToastedMessage('Usuario creado con exito')
+            // this.showToastedMessage('Usuario creado con exito')
           })
         }
 
