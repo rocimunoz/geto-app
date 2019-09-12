@@ -1,5 +1,5 @@
 <template>
-  <v-card fluid v-if="isEditMode">
+  <v-card fluid v-if="hasShowDetails">
     <v-form @submit="onSubmit" id="form-user" ref="form" lazy-validation>
       <v-container text-xs-right>
         <v-row>
@@ -114,16 +114,24 @@ export default {
   },
   methods: {
     onSubmit(evt) {
+      //Compruebo modo
+
       //Guardar usuario en Firebase
       if (this.$refs.form.validate()) {
         this.user_selected = this.getUserSelected
-        let updateRef = this.ref.doc(this.user_selected.id)
-        updateRef.update({
-          nombre: evt.target.elements.nombre.value,
-          apellido: evt.target.elements.apellidos.value,
-          telefono: evt.target.elements.telefono.value,
-          email: evt.target.elements.email.value
-        })
+        if (this.isEditMode) {
+          let updateRef = this.ref.doc(this.user_selected.id)
+          updateRef.update({
+            nombre: evt.target.elements.nombre.value,
+            apellido: evt.target.elements.apellidos.value,
+            telefono: evt.target.elements.telefono.value,
+            email: evt.target.elements.email.value
+          })
+        } else if (this.isNewMode) {
+          //firebase para dar de alta usuario
+          alert('dare de alta el usuario')
+        }
+
         this.onCloseDetails()
         this.$toasted.show('Usuario actualizado con éxito', {
           position: 'top-center',
@@ -134,7 +142,11 @@ export default {
       }
     },
     onCloseDetails() {
-      this.$store.commit('editMode', false)
+      if (this.isEditMode) {
+        this.$store.commit('editMode', false)
+      } else if (this.isNewMode) {
+        this.$store.commit('newMode', false)
+      }
     }
   },
   computed: {
@@ -143,6 +155,12 @@ export default {
     },
     isEditMode() {
       return this.$store.state.edit_mode
+    },
+    isNewMode() {
+      return this.$store.state.new_mode
+    },
+    hasShowDetails() {
+      return this.$store.state.edit_mode || this.$store.state.new_mode
     }
   }
 }

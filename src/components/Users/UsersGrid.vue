@@ -1,5 +1,5 @@
 <template>
-  <v-card fluid :disabled="isEditMode">
+  <v-card fluid :disabled="isDisabledGrid()">
     <v-dialog v-model="dialog" width="500" @keydown.esc="cancel">
       <v-card>
         <v-toolbar color="amber" dark dense flat>
@@ -45,7 +45,13 @@
         <thead>
           <tr>
             <th align:right :colspan="headers.length">
-              <v-btn @click="newUser()" class="mx-2" fab x-small color="amber">
+              <v-btn
+                @click="newUser(true)"
+                class="mx-2"
+                fab
+                x-small
+                color="amber"
+              >
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
 
@@ -55,7 +61,7 @@
                 fab
                 x-small
                 color="amber"
-                :disabled="isDisabled()"
+                :disabled="isDisabledButtons()"
               >
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
@@ -65,7 +71,7 @@
                 fab
                 x-small
                 color="amber"
-                :disabled="isDisabled()"
+                :disabled="isDisabledButtons()"
               >
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
@@ -137,35 +143,32 @@ export default {
         this.$store.commit('toggleUserDetails', '')
       }
     },
-    isDisabled() {
+    isDisabledButtons() {
       let user = this.$store.state.user_selected
       return Object.keys(user).length === 0
     },
+    isDisabledGrid() {
+      return this.isNewMode || this.isEditMode
+    },
 
-    newUser() {
-      alert('nuevo usuario')
+    newUser(value) {
+      this.$store.commit('newMode', value)
     },
     editUser(value) {
       this.$store.commit('editMode', value)
     },
     deleteUser() {
       let user = this.getUserSelected
-      /*   let refDelete = this.ref.where('id', '==', user.id)
-      refDelete.get().then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          doc.ref.delete()
-        })
-      }) */
-      /*  this.$toasted.show('Usuario eliminado con éxito', {
-        position: 'top-center',
-        duration: 3000
-      }) */
 
       this.ref
         .doc(user.id)
         .delete()
         .then(function() {
-          console.log('Document successfully deleted!')
+          this.closeDialog()
+          this.$toasted.show('Usuario borrado con éxito', {
+            position: 'top-center',
+            duration: 3000
+          })
         })
         .catch(function(error) {
           console.error('Error removing document: ', error)
@@ -176,11 +179,18 @@ export default {
     },
     closeDialog() {
       this.dialog = false
+    },
+    cleanUserSelected() {
+      this.$store.state.user_selected = ''
     }
   },
   computed: {
     isEditMode() {
       return this.$store.state.edit_mode
+    },
+    isNewMode() {
+      this.cleanUserSelected
+      return this.$store.state.new_mode
     },
     getUserSelected() {
       return this.$store.state.user_selected
