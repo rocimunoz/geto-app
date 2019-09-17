@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    layout: 'login-layout',
     user_selected: {},
     edit_mode: false,
     new_mode: false
@@ -18,6 +19,9 @@ export default new Vuex.Store({
     },
     newMode(state, payload) {
       state.new_mode = payload
+    },
+    SET_LAYOUT(state, newLayout) {
+      state.layout = newLayout
     }
   },
   actions: {}

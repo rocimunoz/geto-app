@@ -115,6 +115,7 @@ export default {
     }
   },
   created() {
+    //this.$store.commit('SET_LAYOUT', 'home-layout')
     this.ref.onSnapshot(querySnapshot => {
       this.usuarios = []
       querySnapshot.forEach(doc => {

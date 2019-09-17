@@ -1,62 +1,26 @@
 <template>
-  <v-app id="keep">
-    <v-app-bar app clipped-left color="amber">
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <span class="title ml-3 mr-5">Gestion de Torneos</span>
-      <v-text-field
-        solo-inverted
-        flat
-        hide-details
-        label="Search"
-        prepend-inner-icon="search"
-      ></v-text-field>
-      <div class="flex-grow-1"></div>
-    </v-app-bar>
-
-    <v-navigation-drawer v-model="drawer" app clipped color="grey lighten-4">
-      <v-list dense class="grey lighten-4">
-        <template v-for="(item, i) in items">
-          <v-row v-if="item.heading" :key="i" align="center">
-            {{ item.heading }}
-          </v-row>
-          <v-divider
-            v-else-if="item.divider"
-            :key="i"
-            dark
-            class="my-4"
-          ></v-divider>
-          <v-list-item v-else :key="i" :to="{ path: item.link }">
-            <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="grey--text">
-                {{ item.text }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-content>
-      <v-container fluid class="grey lighten-4 fill-height">
-        <v-row justify="center" align="center">
-          <router-view></router-view>
-        </v-row>
-      </v-container>
+  <v-app>
+    <v-content transition="slide-x-transition">
+      <component :is="layout">
+        <router-view :layout.sync="layout" />
+      </component>
     </v-content>
   </v-app>
 </template>
 
 <script>
+import LoginLayout from './layouts/Login.vue'
+import HomeLayout from './layouts/Home.vue'
+import { mapState } from 'vuex'
+
 export default {
   name: 'App',
   props: {
     source: String
   },
-  components: {},
+  components: { LoginLayout, HomeLayout },
   data: () => ({
+    layout: 'div',
     drawer: null,
     items: [
       { icon: 'lightbulb_outline', text: 'Usuarios', link: '/users' },
@@ -65,7 +29,8 @@ export default {
       //{ icon: 'keyboard', text: 'Keyboard shortcuts' },
       //{ divider: true },
     ]
-  })
+  }),
+  computed: mapState(['layout'])
 }
 </script>
 
